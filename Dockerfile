@@ -6,12 +6,15 @@ RUN apk update && apk upgrade && \
 WORKDIR /app
 
 COPY go.mod go.sum ./
+
 RUN go mod download
 
 COPY . .
 
 RUN go build -o main .
 
+RUN go install github.com/air-verse/air@latest
+
 EXPOSE 8888
 
-CMD ["./main"]
+CMD ["air"]

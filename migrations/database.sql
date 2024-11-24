@@ -13,4 +13,9 @@ CREATE TABLE users (
   updated_at  TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
+CREATE TABLE roles (
+  id          UUID PRIMARY KEY DEFAULT uuid_generate_v4() NOT NULL,
+  nama        VARCHAR(100) NOT NULL,
+)
+
 DROP DATABASE golang_template;

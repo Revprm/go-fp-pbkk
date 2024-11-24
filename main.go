@@ -45,8 +45,13 @@ func main() {
 
 	// routes
 	routes.User(server, userController, jwtService)
-
 	server.Static("/assets", "./assets")
+
+	// Check migration
+	// if err := migrations.Seeder(db); err != nil {
+	// 	log.Fatalf("error migration seeder: %v", err)
+	// }
+
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "8888"
@@ -59,6 +64,8 @@ func main() {
 		serve = ":" + port
 	}
 
+	// Just in case it detects trailing slash
+	server.RedirectTrailingSlash = true
 	if err := server.Run(serve); err != nil {
 		log.Fatalf("error running server: %v", err)
 	}

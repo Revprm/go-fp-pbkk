@@ -36,13 +36,8 @@ func ListRoleSeeder(db *gorm.DB) error {
 
 	for _, data := range listRole {
 		var role entity.Role
-		err := db.Where(&entity.Role{ID: data.ID}).First(&role).Error
-		if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
-			return err
-		}
-
-		isData := db.Find(&role, "id = ?", data.ID).RowsAffected
-		if isData == 0 {
+		err := db.Where("id = ?", data.ID).First(&role).Error
+		if errors.Is(err, gorm.ErrRecordNotFound) {
 			if err := db.Create(&data).Error; err != nil {
 				return err
 			}
