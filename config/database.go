@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/Caknoooo/go-gin-clean-starter/constants"
+	"github.com/Revprm/go-fp-pbkk/constants"
 	"github.com/joho/godotenv"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -33,6 +33,14 @@ func SetUpDatabaseConnection() *gorm.DB {
 	if err != nil {
 		panic(err)
 	}
+
+	// Uncomment to auto mgrate mock data
+	// if err := db.AutoMigrate(
+	// 	&entity.Role{},
+	// 	&entity.User{},
+	// ); err != nil {
+	// 	panic(err)
+	// }
 
 	return db
 }

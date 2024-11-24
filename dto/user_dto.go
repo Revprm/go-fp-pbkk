@@ -4,7 +4,7 @@ import (
 	"errors"
 	"mime/multipart"
 
-	"github.com/Caknoooo/go-gin-clean-starter/entity"
+	"github.com/Revprm/go-fp-pbkk/entity"
 )
 
 const (
@@ -15,6 +15,7 @@ const (
 	MESSAGE_FAILED_GET_USER_TOKEN          = "failed get user token"
 	MESSAGE_FAILED_TOKEN_NOT_VALID         = "token not valid"
 	MESSAGE_FAILED_TOKEN_NOT_FOUND         = "token not found"
+	MESSAGE_FAILED_VERIFY_TOKEN            = "token failed to verify"
 	MESSAGE_FAILED_GET_USER                = "failed get user"
 	MESSAGE_FAILED_LOGIN                   = "failed login"
 	MESSAGE_FAILED_WRONG_EMAIL_OR_PASSWORD = "wrong email or password"
@@ -52,6 +53,7 @@ var (
 	ErrTokenInvalid           = errors.New("token invalid")
 	ErrTokenExpired           = errors.New("token expired")
 	ErrAccountAlreadyVerified = errors.New("account already verified")
+	ErrRoleNotAllowed         = errors.New("denied access for \"%v\" role")
 )
 
 type (

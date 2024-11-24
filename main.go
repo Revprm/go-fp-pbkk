@@ -4,13 +4,13 @@ import (
 	"log"
 	"os"
 
-	"github.com/Caknoooo/go-gin-clean-starter/command"
-	"github.com/Caknoooo/go-gin-clean-starter/config"
-	"github.com/Caknoooo/go-gin-clean-starter/controller"
-	"github.com/Caknoooo/go-gin-clean-starter/middleware"
-	"github.com/Caknoooo/go-gin-clean-starter/repository"
-	"github.com/Caknoooo/go-gin-clean-starter/routes"
-	"github.com/Caknoooo/go-gin-clean-starter/service"
+	"github.com/Revprm/go-fp-pbkk/command"
+	"github.com/Revprm/go-fp-pbkk/config"
+	"github.com/Revprm/go-fp-pbkk/controller"
+	"github.com/Revprm/go-fp-pbkk/middleware"
+	"github.com/Revprm/go-fp-pbkk/repository"
+	"github.com/Revprm/go-fp-pbkk/routes"
+	"github.com/Revprm/go-fp-pbkk/service"
 
 	"github.com/gin-gonic/gin"
 )

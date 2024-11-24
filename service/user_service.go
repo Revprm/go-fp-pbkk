@@ -9,12 +9,12 @@ import (
 	"strings"
 	"time"
 
-	"github.com/Caknoooo/go-gin-clean-starter/constants"
-	"github.com/Caknoooo/go-gin-clean-starter/dto"
-	"github.com/Caknoooo/go-gin-clean-starter/entity"
-	"github.com/Caknoooo/go-gin-clean-starter/helpers"
-	"github.com/Caknoooo/go-gin-clean-starter/repository"
-	"github.com/Caknoooo/go-gin-clean-starter/utils"
+	"github.com/Revprm/go-fp-pbkk/constants"
+	"github.com/Revprm/go-fp-pbkk/dto"
+	"github.com/Revprm/go-fp-pbkk/entity"
+	"github.com/Revprm/go-fp-pbkk/helpers"
+	"github.com/Revprm/go-fp-pbkk/repository"
+	"github.com/Revprm/go-fp-pbkk/utils"
 	"github.com/google/uuid"
 )
 

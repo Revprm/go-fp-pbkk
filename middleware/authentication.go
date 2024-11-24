@@ -4,9 +4,9 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/Caknoooo/go-gin-clean-starter/dto"
-	"github.com/Caknoooo/go-gin-clean-starter/service"
-	"github.com/Caknoooo/go-gin-clean-starter/utils"
+	"github.com/Revprm/go-fp-pbkk/dto"
+	"github.com/Revprm/go-fp-pbkk/service"
+	"github.com/Revprm/go-fp-pbkk/utils"
 	"github.com/gin-gonic/gin"
 )
 
@@ -35,7 +35,7 @@ func Authenticate(jwtService service.JWTService) gin.HandlerFunc {
 			ctx.AbortWithStatusJSON(http.StatusUnauthorized, response)
 			return
 		}
-		userId, err := jwtService.GetUserIDByToken(authHeader)
+		userId, userRole, err := jwtService.GetUserIDByToken(authHeader)
 		if err != nil {
 			response := utils.BuildResponseFailed(dto.MESSAGE_FAILED_PROSES_REQUEST, err.Error(), nil)
 			ctx.AbortWithStatusJSON(http.StatusUnauthorized, response)
@@ -43,6 +43,7 @@ func Authenticate(jwtService service.JWTService) gin.HandlerFunc {
 		}
 		ctx.Set("token", authHeader)
 		ctx.Set("user_id", userId)
+		ctx.Set("user_role", userRole)
 		ctx.Next()
 	}
 }

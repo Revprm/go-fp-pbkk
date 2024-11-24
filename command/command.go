@@ -5,8 +5,8 @@ import (
 	"os"
 	"strings"
 
-	"github.com/Caknoooo/go-gin-clean-starter/migrations"
-	"github.com/Caknoooo/go-gin-clean-starter/script"
+	"github.com/Revprm/go-fp-pbkk/migrations"
+	"github.com/Revprm/go-fp-pbkk/script"
 	"gorm.io/gorm"
 )
 

@@ -4,8 +4,8 @@ import (
 	"context"
 	"math"
 
-	"github.com/Caknoooo/go-gin-clean-starter/dto"
-	"github.com/Caknoooo/go-gin-clean-starter/entity"
+	"github.com/Revprm/go-fp-pbkk/dto"
+	"github.com/Revprm/go-fp-pbkk/entity"
 	"gorm.io/gorm"
 )
 
@@ -71,12 +71,12 @@ func (r *userRepository) GetAllUserWithPagination(ctx context.Context, tx *gorm.
 	totalPage := int64(math.Ceil(float64(count) / float64(req.PerPage)))
 
 	return dto.GetAllUserRepositoryResponse{
-		Users:     users,
+		Users: users,
 		PaginationResponse: dto.PaginationResponse{
-			Page: 		 req.Page,
-			PerPage: 	 req.PerPage,
-			Count: 		 count,
-			MaxPage: 	 totalPage,
+			Page:    req.Page,
+			PerPage: req.PerPage,
+			Count:   count,
+			MaxPage: totalPage,
 		},
 	}, err
 }

@@ -6,7 +6,7 @@ import (
 	"io"
 	"os"
 
-	"github.com/Caknoooo/go-gin-clean-starter/entity"
+	"github.com/Revprm/go-fp-pbkk/entity"
 	"gorm.io/gorm"
 )
 
@@ -15,8 +15,12 @@ func ListUserSeeder(db *gorm.DB) error {
 	if err != nil {
 		return err
 	}
+	defer jsonFile.Close()
 
 	jsonData, _ := io.ReadAll(jsonFile)
+	if err != nil {
+		return err
+	}
 
 	var listUser []entity.User
 	if err := json.Unmarshal(jsonData, &listUser); err != nil {
