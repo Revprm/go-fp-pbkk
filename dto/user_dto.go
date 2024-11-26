@@ -2,7 +2,6 @@ package dto
 
 import (
 	"errors"
-	"mime/multipart"
 
 	"github.com/Revprm/go-fp-pbkk/entity"
 )
@@ -58,20 +57,17 @@ var (
 
 type (
 	UserCreateRequest struct {
-		Name       string                `json:"name" form:"name"`
-		TelpNumber string                `json:"telp_number" form:"telp_number"`
-		Email      string                `json:"email" form:"email"`
-		Image      *multipart.FileHeader `json:"image" form:"image"`
-		Password   string                `json:"password" form:"password"`
+		Name     string `json:"name" form:"name"`
+		Email    string `json:"email" form:"email"`
+		Password string `json:"password" form:"password"`
 	}
 
 	UserResponse struct {
 		ID         string `json:"id"`
 		Name       string `json:"name"`
 		Email      string `json:"email"`
-		TelpNumber string `json:"telp_number"`
-		Role       string `json:"role"`
-		ImageUrl   string `json:"image_url"`
+		RoleID     string `json:"role_id,omitempty"`
+		Role       string `json:"role,omitempty"`
 		IsVerified bool   `json:"is_verified"`
 	}
 
@@ -86,17 +82,15 @@ type (
 	}
 
 	UserUpdateRequest struct {
-		Name       string `json:"name" form:"name"`
-		TelpNumber string `json:"telp_number" form:"telp_number"`
-		Email      string `json:"email" form:"email"`
+		Name  string `json:"name" form:"name"`
+		Email string `json:"email" form:"email"`
 	}
 
 	UserUpdateResponse struct {
 		ID         string `json:"id"`
 		Name       string `json:"name"`
-		TelpNumber string `json:"telp_number"`
-		Role       string `json:"role"`
 		Email      string `json:"email"`
+		Role       string `json:"role"`
 		IsVerified bool   `json:"is_verified"`
 	}
 
