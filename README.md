@@ -9,6 +9,9 @@ This repository contains the final project for the Framework-Based Programming c
 | 5025221002 | Iftala Zahri Sukmana |
 | 5025221252 |     Revy Pramana     |
 
+## API Documentation
+https://www.postman.com/schematicsdev/fp-pbkk/collection/px7o4z0/fp-pbkk
+
 ## Quick Start
 
 To set up and run the project locally, follow these steps:
