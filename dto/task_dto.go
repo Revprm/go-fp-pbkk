@@ -18,10 +18,11 @@ const (
 	MESSAGE_FAILED_GET_TASKS   = "failed to get tasks"
 
 	// Success
+	MESSAGE_SUCCESS_GET_TASK    = "success getting task"
+	MESSAGE_SUCCESS_GET_TASKS   = "success getting tasks"
 	MESSAGE_SUCCESS_CREATE_TASK = "success creating task"
 	MESSAGE_SUCCESS_UPDATE_TASK = "success updating task"
 	MESSAGE_SUCCESS_DELETE_TASK = "success deleting task"
-	MESSAGE_SUCCESS_GET_TASKS   = "success getting tasks"
 )
 
 var (

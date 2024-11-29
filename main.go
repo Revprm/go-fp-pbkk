@@ -32,12 +32,15 @@ func main() {
 		// Implementation Dependency Injection
 		// Repository
 		userRepository repository.UserRepository = repository.NewUserRepository(db)
+		taskRepository repository.TaskRepository = repository.NewTaskRepository(db)
 
 		// Service
 		userService service.UserService = service.NewUserService(userRepository, jwtService)
+		taskService service.TaskService = service.NewTaskService(taskRepository)
 
 		// Controller
 		userController controller.UserController = controller.NewUserController(userService)
+		taskController controller.TaskController = controller.NewTaskController(taskService)
 	)
 
 	server := gin.Default()
@@ -45,6 +48,7 @@ func main() {
 
 	// routes
 	routes.User(server, userController, jwtService)
+	routes.Task(server, taskController, jwtService)
 	server.Static("/assets", "./assets")
 
 	// Check migration
