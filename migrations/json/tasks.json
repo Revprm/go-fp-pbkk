@@ -1,0 +1,57 @@
+[
+  {
+    "id": "13be74c4-2460-4a98-a030-fac45ca2d7f4",
+    "title": "Complete weekly report",
+    "description": "Gather data and write up the weekly sales report",
+    "status": "In Progress",
+    "due_date": "2023-06-04T17:00:00.000Z",
+    "user_id": "5e4f7fb6-a130-459d-b4c5-fe2e9a953e3b",
+    "created_at": "2023-05-27T17:00:00.000Z",
+    "updated_at": "2023-05-27T17:00:00.000Z",
+    "deleted_at": null
+  },
+  {
+    "id": "bd6e9c9e-2ce6-4eff-891d-e2acd7067a20",
+    "title": "Finish design mockups",
+    "description": "Work on the new homepage design",
+    "status": "Open",
+    "due_date": "2023-06-11T17:00:00.000Z",
+    "user_id": "7d8efffd-6392-4f47-92c6-bef720d0467e",
+    "created_at": "2023-05-27T17:00:00.000Z",
+    "updated_at": "2023-05-27T17:00:00.000Z",
+    "deleted_at": null
+  },
+  {
+    "id": "21abb64d-905f-4e68-a14d-99bc5b8ef3fb",
+    "title": "Implement new feature",
+    "description": "Build the shopping cart functionality",
+    "status": "In Progress",
+    "due_date": "2023-06-18T17:00:00.000Z",
+    "user_id": "5e4f7fb6-a130-459d-b4c5-fe2e9a953e3b",
+    "created_at": "2023-05-27T17:00:00.000Z",
+    "updated_at": "2023-05-27T17:00:00.000Z",
+    "deleted_at": null
+  },
+  {
+    "id": "38ab0a4b-1080-4194-890c-f4f28e619977",
+    "title": "Review marketing campaign",
+    "description": "Analyze the performance of the latest marketing campaign",
+    "status": "Open",
+    "due_date": "2023-06-07T17:00:00.000Z",
+    "user_id": "7d8efffd-6392-4f47-92c6-bef720d0467e",
+    "created_at": "2023-05-27T17:00:00.000Z",
+    "updated_at": "2023-05-27T17:00:00.000Z",
+    "deleted_at": null
+  },
+  {
+    "id": "5eed7161-5a06-4e35-a5c1-c97461dc3e23",
+    "title": "Prepare quarterly presentation",
+    "description": "Create slides for the upcoming quarterly review",
+    "status": "In Progress",
+    "due_date": "2023-06-25T17:00:00.000Z",
+    "user_id": "5e4f7fb6-a130-459d-b4c5-fe2e9a953e3b",
+    "created_at": "2023-05-27T17:00:00.000Z",
+    "updated_at": "2023-05-27T17:00:00.000Z",
+    "deleted_at": null
+  }
+]
