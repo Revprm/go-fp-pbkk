@@ -3,6 +3,7 @@ package controller
 import (
 	"net/http"
 
+	"github.com/Revprm/go-fp-pbkk/constants"
 	"github.com/Revprm/go-fp-pbkk/dto"
 	"github.com/Revprm/go-fp-pbkk/service"
 	"github.com/Revprm/go-fp-pbkk/utils"
@@ -77,9 +78,10 @@ func (c *userController) GetAllUser(ctx *gin.Context) {
 }
 
 func (c *userController) Me(ctx *gin.Context) {
-	userId := ctx.MustGet("user_id").(string)
+	userId := ctx.MustGet(constants.CTX_KEY_USER_ID).(string)
+	userRole := ctx.MustGet(constants.CTX_KEY_ROLE_NAME).(string)
 
-	result, err := c.userService.GetUserById(ctx.Request.Context(), userId)
+	result, err := c.userService.GetUserById(ctx.Request.Context(), userId, userRole)
 	if err != nil {
 		res := utils.BuildResponseFailed(dto.MESSAGE_FAILED_GET_USER, err.Error(), nil)
 		ctx.JSON(http.StatusBadRequest, res)

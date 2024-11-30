@@ -2,6 +2,7 @@ package repository
 
 import (
 	"context"
+	"log"
 	"math"
 
 	"github.com/Revprm/go-fp-pbkk/dto"
@@ -35,11 +36,22 @@ func (r *userRepository) RegisterUser(ctx context.Context, tx *gorm.DB, user ent
 	if tx == nil {
 		tx = r.db
 	}
+	var role entity.Role
+	if err := r.db.Where("name = ?", "user").First(&role).Error; err != nil {
+		return entity.User{}, err
+	}
 
+	user.RoleID = role.ID.String()
+	log.Println(user)
 	if err := tx.WithContext(ctx).Create(&user).Error; err != nil {
 		return entity.User{}, err
 	}
 
+	if err := tx.WithContext(ctx).Preload("Role").First(&user, "id = ?", user.ID).Error; err != nil {
+		return entity.User{}, err
+	}
+
+	log.Println(user)
 	return user, nil
 }
 
@@ -64,11 +76,13 @@ func (r *userRepository) GetAllUserWithPagination(ctx context.Context, tx *gorm.
 		return dto.GetAllUserRepositoryResponse{}, err
 	}
 
-	if err := tx.WithContext(ctx).Scopes(Paginate(req.Page, req.PerPage)).Find(&users).Error; err != nil {
+	if err := tx.WithContext(ctx).Preload("Role").Scopes(Paginate(req.Page, req.PerPage)).Find(&users).Error; err != nil {
 		return dto.GetAllUserRepositoryResponse{}, err
 	}
 
 	totalPage := int64(math.Ceil(float64(count) / float64(req.PerPage)))
+
+	log.Println(users)
 
 	return dto.GetAllUserRepositoryResponse{
 		Users: users,
@@ -91,6 +105,7 @@ func (r *userRepository) GetUserById(ctx context.Context, tx *gorm.DB, userId st
 		return entity.User{}, err
 	}
 
+	log.Println(user)
 	return user, nil
 }
 
@@ -103,6 +118,13 @@ func (r *userRepository) GetUserByEmail(ctx context.Context, tx *gorm.DB, email 
 	if err := tx.WithContext(ctx).Where("email = ?", email).Take(&user).Error; err != nil {
 		return entity.User{}, err
 	}
+
+	var role entity.Role
+	if err := r.db.Where("id = ?", user.RoleID).Take(&role).Error; err != nil {
+		return entity.User{}, err
+	}
+
+	user.Role = &role
 
 	return user, nil
 }

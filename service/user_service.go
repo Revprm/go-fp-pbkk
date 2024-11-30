@@ -3,26 +3,24 @@ package service
 import (
 	"bytes"
 	"context"
-	"fmt"
 	"html/template"
+	"log"
 	"os"
 	"strings"
 	"time"
 
-	"github.com/Revprm/go-fp-pbkk/constants"
 	"github.com/Revprm/go-fp-pbkk/dto"
 	"github.com/Revprm/go-fp-pbkk/entity"
 	"github.com/Revprm/go-fp-pbkk/helpers"
 	"github.com/Revprm/go-fp-pbkk/repository"
 	"github.com/Revprm/go-fp-pbkk/utils"
-	"github.com/google/uuid"
 )
 
 type (
 	UserService interface {
 		Register(ctx context.Context, req dto.UserCreateRequest) (dto.UserResponse, error)
 		GetAllUserWithPagination(ctx context.Context, req dto.PaginationRequest) (dto.UserPaginationResponse, error)
-		GetUserById(ctx context.Context, userId string) (dto.UserResponse, error)
+		GetUserById(ctx context.Context, userId string, userRole string) (dto.UserResponse, error)
 		GetUserByEmail(ctx context.Context, email string) (dto.UserResponse, error)
 		SendVerificationEmail(ctx context.Context, req dto.SendVerificationEmailRequest) error
 		VerifyEmail(ctx context.Context, req dto.VerifyEmailRequest) (dto.VerifyEmailResponse, error)
@@ -50,31 +48,16 @@ const (
 )
 
 func (s *userService) Register(ctx context.Context, req dto.UserCreateRequest) (dto.UserResponse, error) {
-	var filename string
-
 	_, flag, _ := s.userRepo.CheckEmail(ctx, nil, req.Email)
 	if flag {
 		return dto.UserResponse{}, dto.ErrEmailAlreadyExists
 	}
 
-	if req.Image != nil {
-		imageId := uuid.New()
-		ext := utils.GetExtensions(req.Image.Filename)
-
-		filename = fmt.Sprintf("profile/%s.%s", imageId, ext)
-		if err := utils.UploadFile(req.Image, filename); err != nil {
-			return dto.UserResponse{}, err
-		}
-	}
-
 	user := entity.User{
 		Name:       req.Name,
-		TelpNumber: req.TelpNumber,
-		ImageUrl:   filename,
-		Role:       constants.ENUM_ROLE_USER,
 		Email:      req.Email,
 		Password:   req.Password,
-		IsVerified: false,
+		IsVerified: true, // Set false if wanted to use email
 	}
 
 	userReg, err := s.userRepo.RegisterUser(ctx, nil, user)
@@ -82,23 +65,21 @@ func (s *userService) Register(ctx context.Context, req dto.UserCreateRequest) (
 		return dto.UserResponse{}, dto.ErrCreateUser
 	}
 
-	draftEmail, err := makeVerificationEmail(userReg.Email)
-	if err != nil {
-		return dto.UserResponse{}, err
-	}
+	// draftEmail, err := makeVerificationEmail(userReg.Email)
+	// if err != nil {
+	// 	return dto.UserResponse{}, err
+	// }
 
-	err = utils.SendMail(userReg.Email, draftEmail["subject"], draftEmail["body"])
-	if err != nil {
-		return dto.UserResponse{}, err
-	}
+	// err = utils.SendMail(userReg.Email, draftEmail["subject"], draftEmail["body"])
+	// if err != nil {
+	// 	return dto.UserResponse{}, err
+	// }
 
 	return dto.UserResponse{
 		ID:         userReg.ID.String(),
 		Name:       userReg.Name,
-		TelpNumber: userReg.TelpNumber,
-		ImageUrl:   userReg.ImageUrl,
-		Role:       userReg.Role,
 		Email:      userReg.Email,
+		Role:       userReg.Role.Name,
 		IsVerified: userReg.IsVerified,
 	}, nil
 }
@@ -225,9 +206,7 @@ func (s *userService) GetAllUserWithPagination(ctx context.Context, req dto.Pagi
 			ID:         user.ID.String(),
 			Name:       user.Name,
 			Email:      user.Email,
-			Role:       user.Role,
-			TelpNumber: user.TelpNumber,
-			ImageUrl:   user.ImageUrl,
+			Role:       user.Role.Name,
 			IsVerified: user.IsVerified,
 		}
 
@@ -245,7 +224,7 @@ func (s *userService) GetAllUserWithPagination(ctx context.Context, req dto.Pagi
 	}, nil
 }
 
-func (s *userService) GetUserById(ctx context.Context, userId string) (dto.UserResponse, error) {
+func (s *userService) GetUserById(ctx context.Context, userId string, userRole string) (dto.UserResponse, error) {
 	user, err := s.userRepo.GetUserById(ctx, nil, userId)
 	if err != nil {
 		return dto.UserResponse{}, dto.ErrGetUserById
@@ -254,10 +233,8 @@ func (s *userService) GetUserById(ctx context.Context, userId string) (dto.UserR
 	return dto.UserResponse{
 		ID:         user.ID.String(),
 		Name:       user.Name,
-		TelpNumber: user.TelpNumber,
-		Role:       user.Role,
 		Email:      user.Email,
-		ImageUrl:   user.ImageUrl,
+		Role:       userRole,
 		IsVerified: user.IsVerified,
 	}, nil
 }
@@ -271,10 +248,8 @@ func (s *userService) GetUserByEmail(ctx context.Context, email string) (dto.Use
 	return dto.UserResponse{
 		ID:         emails.ID.String(),
 		Name:       emails.Name,
-		TelpNumber: emails.TelpNumber,
-		Role:       emails.Role,
 		Email:      emails.Email,
-		ImageUrl:   emails.ImageUrl,
+		Role:       emails.Role.Name,
 		IsVerified: emails.IsVerified,
 	}, nil
 }
@@ -286,11 +261,10 @@ func (s *userService) Update(ctx context.Context, req dto.UserUpdateRequest, use
 	}
 
 	data := entity.User{
-		ID:         user.ID,
-		Name:       req.Name,
-		TelpNumber: req.TelpNumber,
-		Role:       user.Role,
-		Email:      req.Email,
+		ID:    user.ID,
+		Name:  req.Name,
+		Email: req.Email,
+		Role:  user.Role,
 	}
 
 	userUpdate, err := s.userRepo.UpdateUser(ctx, nil, data)
@@ -301,9 +275,8 @@ func (s *userService) Update(ctx context.Context, req dto.UserUpdateRequest, use
 	return dto.UserUpdateResponse{
 		ID:         userUpdate.ID.String(),
 		Name:       userUpdate.Name,
-		TelpNumber: userUpdate.TelpNumber,
-		Role:       userUpdate.Role,
 		Email:      userUpdate.Email,
+		Role:       userUpdate.Role.Name,
 		IsVerified: user.IsVerified,
 	}, nil
 }
@@ -323,8 +296,8 @@ func (s *userService) Delete(ctx context.Context, userId string) error {
 }
 
 func (s *userService) Verify(ctx context.Context, req dto.UserLoginRequest) (dto.UserLoginResponse, error) {
-	check, flag, err := s.userRepo.CheckEmail(ctx, nil, req.Email)
-	if err != nil || !flag {
+	check, err := s.userRepo.GetUserByEmail(ctx, nil, req.Email)
+	if err != nil {
 		return dto.UserLoginResponse{}, dto.ErrEmailNotFound
 	}
 
@@ -337,10 +310,12 @@ func (s *userService) Verify(ctx context.Context, req dto.UserLoginRequest) (dto
 		return dto.UserLoginResponse{}, dto.ErrPasswordNotMatch
 	}
 
-	token := s.jwtService.GenerateToken(check.ID.String(), check.Role)
+	log.Println(check)
+	token := s.jwtService.GenerateToken(check.ID.String(), check.Role.Name)
+	log.Println(token)
 
 	return dto.UserLoginResponse{
 		Token: token,
-		Role:  check.Role,
+		Role:  check.Role.Name,
 	}, nil
 }

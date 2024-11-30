@@ -36,8 +36,8 @@ func ListUserSeeder(db *gorm.DB) error {
 
 	for _, data := range listUser {
 		var user entity.User
-		err := db.Where(&entity.User{Email: data.Email}).First(&user).Error
-		if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
+		err := db.Where(&user, "email = ?", data.Email).First(&user).Error
+		if errors.Is(err, gorm.ErrRecordNotFound) {
 			if err := db.Create(&data).Error; err != nil {
 				return err
 			}

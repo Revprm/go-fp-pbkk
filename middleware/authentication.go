@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/Revprm/go-fp-pbkk/constants"
 	"github.com/Revprm/go-fp-pbkk/dto"
 	"github.com/Revprm/go-fp-pbkk/service"
 	"github.com/Revprm/go-fp-pbkk/utils"
@@ -41,9 +42,9 @@ func Authenticate(jwtService service.JWTService) gin.HandlerFunc {
 			ctx.AbortWithStatusJSON(http.StatusUnauthorized, response)
 			return
 		}
-		ctx.Set("token", authHeader)
-		ctx.Set("user_id", userId)
-		ctx.Set("user_role", userRole)
+		ctx.Set(constants.CTX_KEY_TOKEN, authHeader)
+		ctx.Set(constants.CTX_KEY_USER_ID, userId)
+		ctx.Set(constants.CTX_KEY_ROLE_NAME, userRole)
 		ctx.Next()
 	}
 }
