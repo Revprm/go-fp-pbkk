@@ -3,19 +3,32 @@ CREATE DATABASE golang_template;
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 CREATE TABLE users (
-  id          UUID PRIMARY KEY DEFAULT uuid_generate_v4() NOT NULL,
-  nama        VARCHAR(100) NOT NULL,
-  no_telp     VARCHAR(30) NOT NULL,
-  email       VARCHAR(100) NOT NULL,
-  password    VARCHAR(100) NOT NULL,
-  role        VARCHAR(100) NOT NULL,
-  created_at  TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-  updated_at  TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4 () NOT NULL,
+    nama VARCHAR(100) NOT NULL,
+    no_telp VARCHAR(30) NOT NULL,
+    email VARCHAR(100) NOT NULL,
+    password VARCHAR(100) NOT NULL,
+    role VARCHAR(100) NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
 CREATE TABLE roles (
-  id          UUID PRIMARY KEY DEFAULT uuid_generate_v4() NOT NULL,
-  nama        VARCHAR(100) NOT NULL,
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4 () NOT NULL,
+    nama VARCHAR(100) NOT NULL,
 )
+
+CREATE TABLE tasks (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4 (),
+    title VARCHAR(255) NOT NULL,
+    description TEXT,
+    status VARCHAR(255) NOT NULL,
+    due_date TIMESTAMP WITH TIME ZONE NOT NULL,
+    user_id UUID NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+    deleted_at TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users (id) ON UPDATE CASCADE ON DELETE CASCADE
+);
 
 DROP DATABASE golang_template;

@@ -13,7 +13,6 @@ import (
 func OnlyAllow(roles ...string) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		userRole := ctx.GetString(constants.CTX_KEY_ROLE_NAME)
-
 		for _, role := range roles {
 			if userRole == role {
 				ctx.Next()
