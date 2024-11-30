@@ -10,7 +10,7 @@ This repository contains the final project for the Framework-Based Programming c
 | 5025221252 |     Revy Pramana     |
 
 ## API Documentation
-https://www.postman.com/schematicsdev/fp-pbkk/collection/px7o4z0/fp-pbkk
+https://documenter.getpostman.com/view/32470266/2sAYBYeV5b
 
 ## Quick Start
 
