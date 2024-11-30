@@ -2,7 +2,6 @@ package dto
 
 import (
 	"errors"
-	"mime/multipart"
 	"time"
 
 	"github.com/Revprm/go-fp-pbkk/entity"
@@ -37,12 +36,10 @@ var (
 
 type (
 	TaskCreateRequest struct {
-		Title       string                `json:"title" form:"title"`
-		Description string                `json:"description" form:"description"`
-		Status      string                `json:"status" form:"status"`
-		DueDate     time.Time             `json:"due_date" form:"due_date"`
-		UserID      string                `json:"user_id" form:"user_id"`
-		Image       *multipart.FileHeader `json:"image" form:"image"`
+		Title       string    `json:"title" form:"title"`
+		Description string    `json:"description" form:"description"`
+		Status      string    `json:"status" form:"status"`
+		DueDate     time.Time `json:"due_date" form:"due_date"`
 	}
 
 	TaskResponse struct {

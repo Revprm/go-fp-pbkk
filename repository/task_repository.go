@@ -67,7 +67,12 @@ func (r *taskRepository) UpdateTask(ctx context.Context, tx *gorm.DB, taskID uui
 		return nil, dto.ErrUpdateTask
 	}
 
-	return task, nil
+	var updatedTask entity.Task
+	if err := tx.WithContext(ctx).Where("id = ?", taskID).First(&updatedTask).Error; err != nil {
+		return nil, dto.ErrTaskNotFound
+	}
+
+	return &updatedTask, nil
 }
 
 func (r *taskRepository) DeleteTask(ctx context.Context, tx *gorm.DB, taskID uuid.UUID) error {

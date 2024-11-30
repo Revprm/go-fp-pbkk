@@ -11,7 +11,7 @@ import (
 
 type (
 	TaskService interface {
-		CreateTask(ctx context.Context, req dto.TaskCreateRequest) (dto.TaskResponse, error)
+		CreateTask(ctx context.Context, req dto.TaskCreateRequest, userID string) (dto.TaskResponse, error)
 		GetTaskByID(ctx context.Context, taskID uuid.UUID) (dto.TaskResponse, error)
 		UpdateTask(ctx context.Context, taskID uuid.UUID, userID string, req dto.TaskUpdateRequest) (dto.TaskUpdateResponse, error)
 		DeleteTask(ctx context.Context, taskID uuid.UUID, userID string) error
@@ -29,13 +29,13 @@ func NewTaskService(taskRepo repository.TaskRepository) TaskService {
 	}
 }
 
-func (s *taskService) CreateTask(ctx context.Context, req dto.TaskCreateRequest) (dto.TaskResponse, error) {
+func (s *taskService) CreateTask(ctx context.Context, req dto.TaskCreateRequest, userId string) (dto.TaskResponse, error) {
 	task := entity.Task{
 		Title:       req.Title,
 		Description: req.Description,
 		Status:      req.Status,
 		DueDate:     req.DueDate,
-		UserID:      req.UserID,
+		UserID:      userId,
 	}
 
 	createdTask, err := s.taskRepo.CreateTask(ctx, nil, &task)
@@ -50,8 +50,6 @@ func (s *taskService) CreateTask(ctx context.Context, req dto.TaskCreateRequest)
 		Status:      createdTask.Status,
 		DueDate:     createdTask.DueDate,
 		UserID:      createdTask.UserID,
-		CreatedAt:   createdTask.CreatedAt,
-		UpdatedAt:   createdTask.UpdatedAt,
 	}, nil
 }
 

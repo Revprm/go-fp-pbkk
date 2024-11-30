@@ -31,6 +31,8 @@ func NewTaskController(taskService service.TaskService) TaskController {
 }
 
 func (ctrl *taskController) CreateTask(ctx *gin.Context) {
+	userId := ctx.MustGet("user_id").(string)
+
 	var req dto.TaskCreateRequest
 	if err := ctx.ShouldBindJSON(&req); err != nil {
 		res := utils.BuildResponseFailed(dto.MESSAGE_FAILED_GET_DATA_FROM_BODY, err.Error(), nil)
@@ -38,7 +40,7 @@ func (ctrl *taskController) CreateTask(ctx *gin.Context) {
 		return
 	}
 
-	task, err := ctrl.taskService.CreateTask(ctx.Request.Context(), req)
+	task, err := ctrl.taskService.CreateTask(ctx.Request.Context(), req, userId)
 	if err != nil {
 		res := utils.BuildResponseFailed(dto.MESSAGE_FAILED_REGISTER_USER, err.Error(), nil)
 		ctx.JSON(http.StatusBadRequest, res)
@@ -49,7 +51,7 @@ func (ctrl *taskController) CreateTask(ctx *gin.Context) {
 }
 
 func (ctrl *taskController) GetTaskByID(ctx *gin.Context) {
-	taskID, err := uuid.Parse(ctx.Param("taskID"))
+	taskID, err := uuid.Parse(ctx.Param("id"))
 	if err != nil {
 		res := utils.BuildResponseFailed(dto.MESSAGE_FAILED_GET_TASK, err.Error(), nil)
 		ctx.JSON(http.StatusBadRequest, res)
@@ -68,16 +70,18 @@ func (ctrl *taskController) GetTaskByID(ctx *gin.Context) {
 
 func (ctrl *taskController) UpdateTask(ctx *gin.Context) {
 	var req dto.TaskUpdateRequest
-	taskID, err := uuid.Parse(ctx.Param("taskID"))
-	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Invalid task ID"})
+	taskID, err := uuid.Parse(ctx.Param("id"))
+	if err := ctx.ShouldBind(&req); err != nil {
+		res := utils.BuildResponseFailed(dto.MESSAGE_FAILED_GET_DATA_FROM_BODY, err.Error(), nil)
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, res)
 		return
 	}
 
 	userID := ctx.MustGet("user_id").(string)
 	result, err := ctrl.taskService.UpdateTask(ctx.Request.Context(), taskID, userID, req)
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		res := utils.BuildResponseFailed(dto.MESSAGE_FAILED_UPDATE_TASK, err.Error(), nil)
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, res)
 		return
 	}
 
@@ -86,9 +90,10 @@ func (ctrl *taskController) UpdateTask(ctx *gin.Context) {
 }
 
 func (ctrl *taskController) DeleteTask(ctx *gin.Context) {
-	taskID, err := uuid.Parse(ctx.Param("taskID"))
+	taskID, err := uuid.Parse(ctx.Param("id"))
 	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Invalid task ID"})
+		res := utils.BuildResponseFailed(dto.MESSAGE_FAILED_GET_DATA_FROM_BODY, err.Error(), nil)
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, res)
 		return
 	}
 
@@ -100,7 +105,8 @@ func (ctrl *taskController) DeleteTask(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusNoContent, nil)
+	res := utils.BuildResponseSuccess(dto.MESSAGE_SUCCESS_DELETE_TASK, nil)
+	ctx.JSON(http.StatusOK, res)
 }
 
 func (ctrl *taskController) GetTasksWithPagination(ctx *gin.Context) {
