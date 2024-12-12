@@ -44,20 +44,11 @@ export function RegisterForm() {
       const registerResponse = await api.register(data);
       
       if (registerResponse.status) {
-        const loginResponse = await api.login({
-          email: data.email,
-          password: data.password,
-        });
-        
-        if (loginResponse.status && loginResponse.data.token) {
-          const userResponse = await api.getMe(loginResponse.data.token);
-          
-          if (userResponse.status && userResponse.data) {
-            login(userResponse.data, loginResponse.data.token);
-            // The router.push is now handled in the login function
-          }
-        }
+        router.push('/login');
+      } else {
+        setError('Registration failed. Please try again.');
       }
+      
     } catch (err) {
       console.error('Registration error:', err);
       setError('Registration failed. Please try again.');
